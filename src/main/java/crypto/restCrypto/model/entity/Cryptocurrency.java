@@ -46,5 +46,15 @@ public class Cryptocurrency {
     public void setUsers(List<User> users) {
         this.users = users;
     }
+
+    @Override
+    public String toString() {
+        return "Cryptocurrency{" +
+                "id=" + id +
+                ", symbol='" + symbol + '\'' +
+                ", price=" + price +
+                ", users=" + users +
+                '}';
+    }
 }
 

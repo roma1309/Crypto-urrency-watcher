@@ -17,8 +17,6 @@ import java.util.List;
 @RequestMapping(value = "/cryptocurrency")
 public class CryptoController {
     private final CryptocurrencyService cryptocurrencyService;
-    @Autowired
-    private ApiService apiService;
 
     @Autowired
     public CryptoController(CryptocurrencyService cryptocurrencyService) {
@@ -37,8 +35,8 @@ public class CryptoController {
         return cryptocurrencyService.readPriceBySymbol(symbol);
     }
 
-    @GetMapping("/test")
-    public double get() {
-        return apiService.getPrice();
-    }
+//    @GetMapping("/test")
+//    public double[] get() {
+//        return apiService.getActualPrice();
+
 }
