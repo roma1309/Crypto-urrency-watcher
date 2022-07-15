@@ -46,4 +46,8 @@ public class CryptocurrencyService {
             System.out.println(cryptocurrency.toString());
         }
     }
+
+    public Cryptocurrency readById(long id) {
+        return cryptocurrencyRepo.findById(id);
+    }
 }

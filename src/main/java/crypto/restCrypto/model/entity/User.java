@@ -1,5 +1,8 @@
 package crypto.restCrypto.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 
@@ -12,10 +15,19 @@ public class User {
     private String username;
     private double cost;
 
-    // @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "symbol_id")
     private Cryptocurrency cryptocurrency;
+
+    public User() {
+    }
+
+    public User(String username, double cost, Cryptocurrency cryptocurrency) {
+        this.username = username;
+        this.cost = cost;
+        this.cryptocurrency = cryptocurrency;
+    }
 
     public long getId() {
         return id;
@@ -47,5 +59,14 @@ public class User {
 
     public void setCryptocurrency(Cryptocurrency cryptocurrency) {
         this.cryptocurrency = cryptocurrency;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", cost=" + cost +
+                '}';
     }
 }
