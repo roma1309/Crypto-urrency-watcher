@@ -3,7 +3,7 @@ package crypto.restCrypto.model.dto;
 public class UserDto {
     private String username;
     private double cost;
-    private Long cryptocurrencyId;
+    private String symbol;
 
     public String getUsername() {
         return username;
@@ -21,11 +21,11 @@ public class UserDto {
         this.cost = cost;
     }
 
-    public Long getCryptocurrencyId() {
-        return cryptocurrencyId;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setCryptocurrencyId(Long cryptocurrencyId) {
-        this.cryptocurrencyId = cryptocurrencyId;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 }

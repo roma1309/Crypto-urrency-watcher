@@ -20,14 +20,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/notify")
     public ResponseEntity<Long> postUser(
             @RequestBody final UserDto userDto) {
-        return userService.addUser(userDto);
+        return userService.createUser(userDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
+    public List<User> getAll() {
         return userService.readAllUsers();
     }
 }

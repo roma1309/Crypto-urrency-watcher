@@ -5,15 +5,21 @@ import java.util.List;
 
 @Entity
 public class Cryptocurrency {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    @Id
     private String symbol;
     private double price;
 
     @OneToMany(mappedBy = "cryptocurrency", fetch = FetchType.EAGER)
     private List<User> users;
+
+    public Cryptocurrency() {
+    }
+
+    public Cryptocurrency(long id, String symbol) {
+        this.id = id;
+        this.symbol = symbol;
+    }
 
     public long getId() {
         return id;

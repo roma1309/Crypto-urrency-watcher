@@ -26,13 +26,13 @@ public class UserService {
         this.cryptocurrencyService = cryptocurrencyService;
     }
 
-    public ResponseEntity<Long> addUser(UserDto userDto) {
+    public ResponseEntity<Long> createUser(UserDto userDto) {
 
-        if (userDto == null || userDto.getUsername() == null || userDto.getCryptocurrencyId() == null) {
+        if (userDto == null || userDto.getUsername() == null || userDto.getSymbol() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        final Cryptocurrency cryptocurrency = cryptocurrencyService.readById(userDto.getCryptocurrencyId());
+        final Cryptocurrency cryptocurrency = cryptocurrencyService.readBySymbol(userDto.getSymbol());
         if (cryptocurrency == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -42,8 +42,23 @@ public class UserService {
         return ResponseEntity.ok(user.getId());
     }
 
-    public ResponseEntity<List<User>> readAllUsers() {
-        return ResponseEntity.ok(userRepo.findAll());
+    public List<User> readAllUsers() {
+        return userRepo.findAll();
     }
 
+    public List<User> readUsersBySymbol(String symbol) {
+        return userRepo.findAllBySymbol(symbol);
+    }
+
+    public void checkPriceChange() {
+        List<Cryptocurrency> cryptocurrencies = cryptocurrencyService.readAll();
+
+        for (Cryptocurrency cryptocurrency : cryptocurrencies) {
+            List<User> users = readUsersBySymbol(cryptocurrency.getSymbol());
+            for (User user : users) {
+                double percent = (Math.abs(cryptocurrency.getPrice() - user.getCost()) / user.getCost()) * 100;
+                System.out.println(user.toString() + " --- " + percent);
+            }
+        }
+    }
 }

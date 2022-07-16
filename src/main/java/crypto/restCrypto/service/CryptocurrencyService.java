@@ -1,6 +1,7 @@
 package crypto.restCrypto.service;
 
 import crypto.restCrypto.model.entity.Cryptocurrency;
+import crypto.restCrypto.model.entity.User;
 import crypto.restCrypto.repo.CryptocurrencyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,11 @@ public class CryptocurrencyService {
     }
 
     public ResponseEntity<String> readPriceBySymbol(String symbol) {
-        final Cryptocurrency cryptocurrency = cryptocurrencyRepo.findBySymbol(symbol);
-        if (null == cryptocurrency) {
+        final Double price = cryptocurrencyRepo.findPriceBySymbol(symbol);
+        if (null == price) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        Double price = cryptocurrency.getPrice();
+        //Double price = cryptocurrency.getPrice();
         return ResponseEntity.ok(price.toString());
     }
 
@@ -49,5 +50,17 @@ public class CryptocurrencyService {
 
     public Cryptocurrency readById(long id) {
         return cryptocurrencyRepo.findById(id);
+    }
+
+    public Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) {
+        return cryptocurrencyRepo.save(cryptocurrency);
+    }
+
+    public List<Cryptocurrency> readAll() {
+        return cryptocurrencyRepo.findAll();
+    }
+
+    public Cryptocurrency readBySymbol(String symbol) {
+        return cryptocurrencyRepo.findBySymbol(symbol);
     }
 }
