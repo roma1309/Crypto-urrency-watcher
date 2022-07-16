@@ -1,19 +1,20 @@
 package crypto.restCrypto.service;
 
+import crypto.restCrypto.config.LogConfiguration;
 import crypto.restCrypto.model.dto.UserDto;
 import crypto.restCrypto.model.entity.Cryptocurrency;
 import crypto.restCrypto.model.entity.User;
 import crypto.restCrypto.repo.UserRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
-
+import java.util.logging.Logger;
 
 
 @Service
@@ -22,7 +23,7 @@ public class UserService {
     private final UserRepo userRepo;
     private final CryptocurrencyService cryptocurrencyService;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     @Autowired
     public UserService(UserRepo userRepo, CryptocurrencyService cryptocurrencyService) {
@@ -54,17 +55,18 @@ public class UserService {
         return userRepo.findAllBySymbol(symbol);
     }
 
-    public void checkPriceChange() {
+    public void checkPriceChange() throws IOException {
+
+        LogConfiguration.initialize();
         List<Cryptocurrency> cryptocurrencies = cryptocurrencyService.readAll();
         for (Cryptocurrency cryptocurrency : cryptocurrencies) {
             List<User> users = readUsersBySymbol(cryptocurrency.getSymbol());
             for (User user : users) {
                 double percent = (Math.abs(cryptocurrency.getPrice() - user.getCost()) / user.getCost()) * 100;
                 if (percent > 1) {
-                    logger.warn("Symbol= " + cryptocurrency.getSymbol()
+                    logger.warning("Symbol= " + cryptocurrency.getSymbol()
                             + " Username= " + user.getUsername() + " Percent= " + percent);
                 }
-                System.out.println(user.toString() + " --- " + percent);
             }
         }
     }

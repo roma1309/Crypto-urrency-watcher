@@ -34,9 +34,4 @@ public class CryptoController {
     ) {
         return cryptocurrencyService.readPriceBySymbol(symbol);
     }
-
-//    @GetMapping("/test")
-//    public double[] get() {
-//        return apiService.getActualPrice();
-
 }

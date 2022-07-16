@@ -47,14 +47,6 @@ public class CryptocurrencyService {
                 }
             }
         }
-        List<Cryptocurrency> cryptocurrencies2 = cryptocurrencyRepo.findAll();
-        for (Cryptocurrency cryptocurrency : cryptocurrencies2) {
-            System.out.println(cryptocurrency.toString());
-        }
-    }
-
-    public Cryptocurrency readById(long id) {
-        return cryptocurrencyRepo.findById(id);
     }
 
     public Cryptocurrency createCryptocurrency(Cryptocurrency cryptocurrency) {

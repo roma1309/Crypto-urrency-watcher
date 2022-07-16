@@ -25,9 +25,4 @@ public class UserController {
             @RequestBody final UserDto userDto) {
         return userService.createUser(userDto);
     }
-
-    @GetMapping
-    public List<User> getAll() {
-        return userService.readAllUsers();
-    }
 }
