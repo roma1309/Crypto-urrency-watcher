@@ -1,15 +1,20 @@
 package crypto.restCrypto.service;
 
-import crypto.restCrypto.RestCryptoApplication;
+import crypto.restCrypto.model.Price;
 import crypto.restCrypto.model.entity.CoinLore;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.slf4j.Logger;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 
 @Service
@@ -18,12 +23,8 @@ public class ApiService {
     private final CryptocurrencyService cryptocurrencyService;
     private final RestTemplate restTemplate;
     private final UserService userService;
-    private final static String url = "https://api.coinlore.net/api/ticker/?id=90,80,48543";
+    private final static String url = "https://api.coinlore.net/api/ticker/?id=80,90,48543";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestCryptoApplication.class);
-
-    //    private final static String url80 = "https://api.coinlore.net/api/ticker/?id=80";
-//    private final static String url48543 = "https://api.coinlore.net/api/ticker/?id=48543";
     @Autowired
     public ApiService(CryptocurrencyService cryptocurrencyService, RestTemplate restTemplate, UserService userService) {
         this.cryptocurrencyService = cryptocurrencyService;
@@ -32,23 +33,23 @@ public class ApiService {
     }
 
 
-    public double[] getActualPrice() {
+    public List<Price> getActualPrice() {
         CoinLore coinLore[] = restTemplate.getForObject(url, CoinLore[].class);
-//        CoinLore coinLore90[] = restTemplate.getForObject(url80, CoinLore[].class);
-//        CoinLore coinLore48543[] = restTemplate.getForObject(url80, CoinLore[].class);
-        double actualPrice[] = new double[]{
-                coinLore[0].getPrice_usd(),
-                coinLore[1].getPrice_usd(),
-                coinLore[2].getPrice_usd()
-        };
-        return actualPrice;
+
+        List<Price> prices = new ArrayList<>();
+        for (int i = 0; i < coinLore.length; i++) {
+            Price price = new Price();
+            price.setPrice(coinLore[i].getPrice_usd());
+            price.setSymbol(coinLore[i].getSymbol());
+            prices.add(price);
+        }
+        return prices;
     }
 
     @Scheduled(fixedDelay = 60000)
     private void updatePrices() {
         cryptocurrencyService.updateCryptocurrencyPrice(getActualPrice());
         userService.checkPriceChange();
-        LOGGER.warn("This is WARN");
     }
 }
 

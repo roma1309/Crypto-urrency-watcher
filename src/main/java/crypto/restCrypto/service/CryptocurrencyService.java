@@ -1,5 +1,6 @@
 package crypto.restCrypto.service;
 
+import crypto.restCrypto.model.Price;
 import crypto.restCrypto.model.entity.Cryptocurrency;
 import crypto.restCrypto.model.entity.User;
 import crypto.restCrypto.repo.CryptocurrencyRepo;
@@ -33,17 +34,21 @@ public class CryptocurrencyService {
         return ResponseEntity.ok(price.toString());
     }
 
-    public void updateCryptocurrencyPrice(double prices[]) {
-        int count = 0;
+    public void updateCryptocurrencyPrice(List<Price> prices) {
+
         List<Cryptocurrency> cryptocurrencies = cryptocurrencyRepo.findAll();
-        for (Cryptocurrency cryptocurrency : cryptocurrencies) {
-            if (cryptocurrency.getPrice() != prices[count]) {
-                cryptocurrency.setPrice(prices[count]);
-                cryptocurrencyRepo.save(cryptocurrency);
+        for (Price price : prices) {
+            for (Cryptocurrency cryptocurrency : cryptocurrencies) {
+                if (price.getSymbol().equals(cryptocurrency.getSymbol())) {
+                    if (cryptocurrency.getPrice() != price.getPrice()) {
+                        cryptocurrency.setPrice(price.getPrice());
+                        cryptocurrencyRepo.save(cryptocurrency);
+                    }
+                }
             }
-            count++;
         }
-        for (Cryptocurrency cryptocurrency : cryptocurrencies) {
+        List<Cryptocurrency> cryptocurrencies2 = cryptocurrencyRepo.findAll();
+        for (Cryptocurrency cryptocurrency : cryptocurrencies2) {
             System.out.println(cryptocurrency.toString());
         }
     }
