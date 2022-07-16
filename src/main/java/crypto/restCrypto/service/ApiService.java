@@ -47,7 +47,7 @@ public class ApiService {
     }
 
     @Scheduled(fixedDelay = 60000)
-    private void updatePrices() throws IOException {
+    private void updatePrices() {
         cryptocurrencyService.updateCryptocurrencyPrice(getActualPrice());
         userService.checkPriceChange();
     }

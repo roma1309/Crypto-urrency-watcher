@@ -55,7 +55,7 @@ public class UserService {
         return userRepo.findAllBySymbol(symbol);
     }
 
-    public void checkPriceChange() throws IOException {
+    public void checkPriceChange()  {
 
         LogConfiguration.initialize();
         List<Cryptocurrency> cryptocurrencies = cryptocurrencyService.readAll();
