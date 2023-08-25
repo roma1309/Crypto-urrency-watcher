@@ -31,6 +31,7 @@ public class RestCryptoApplication implements CommandLineRunner {
         cryptocurrencyService.createCryptocurrency(cryptocurrency1);
         cryptocurrencyService.createCryptocurrency(cryptocurrency2);
         cryptocurrencyService.createCryptocurrency(cryptocurrency3);
+        System.out.println("Git");
 
     }
 }
